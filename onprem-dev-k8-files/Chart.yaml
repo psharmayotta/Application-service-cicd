@@ -1,6 +1,0 @@
-apiVersion: v2
-name: q0-uiapi
-description: q0-uiapi on-prem deployment
-type: application
-version: 0.1.0
-appVersion: "v1"
