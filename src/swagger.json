@@ -1,0 +1,4767 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Q0 Application Service API Documentation",
+    "version": "1.0.0",
+    "description": "Interactive API Documentation for the Q0 Application Service microservice. The main backend for the Q0 platform handling auth, models, deployments, training, datasets, billing, knowledge bases, and more.\n\nNote: All endpoints accept both plain JSON and AES-encrypted payloads. Swagger UI automatically encrypts requests and decrypts responses via interceptors. Testers can use plain JSON directly."
+  },
+  "servers": [
+    {
+      "url": "/Infer/api",
+      "description": "Environment Server (Relative Path)"
+    },
+    {
+      "url": "http://localhost:3210/Infer/api",
+      "description": "Local Development Server"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/logins/login": {
+      "post": {
+        "summary": "User login",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "user@example.com",
+                "password": "Pass@123"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/sso": {
+      "post": {
+        "summary": "SSO login via Keycloak",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keycloak_token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "keycloak_token": "eyJ..."
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/signup": {
+      "post": {
+        "summary": "User signup",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "full_name": {
+                    "type": "string"
+                  },
+                  "mobile_no": {
+                    "type": "string"
+                  },
+                  "company_name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "user@example.com",
+                "password": "Pass@123"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/forgot-password": {
+      "post": {
+        "summary": "Request password reset",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "user@example.com"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/forgot-password-link-verify": {
+      "post": {
+        "summary": "Verify reset password link/token",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reset_token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "reset_token": "token_string"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/reset-password": {
+      "post": {
+        "summary": "Reset password with token",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "reset_token": {
+                    "type": "string"
+                  },
+                  "new_password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "reset_token": "token_string",
+                "new_password": "NewPass@123"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/logins/resend-verification": {
+      "post": {
+        "summary": "Resend email verification",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "user@example.com"
+              }
+            }
+          }
+        },
+        "security": []
+      }
+    },
+    "/refresh-token": {
+      "post": {
+        "summary": "Refresh access token",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "api_refresh_token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "api_refresh_token": "refresh_token_string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "summary": "User logout",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/members/check-email": {
+      "post": {
+        "summary": "Check if email exists",
+        "tags": [
+          "Authentication"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "email": "user@example.com"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/getdatabyid": {
+      "post": {
+        "summary": "Get member details by ID",
+        "tags": [
+          "Members"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/members/save": {
+      "post": {
+        "summary": "Update member profile",
+        "tags": [
+          "Members"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "id": 1,
+                "full_name": "John Doe",
+                "mobile_no": "9876543210"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-password": {
+      "post": {
+        "summary": "Change current password",
+        "tags": [
+          "Members"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "current_password": {
+                    "type": "string"
+                  },
+                  "new_password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "current_password": "OldPass@123",
+                "new_password": "NewPass@123"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard/getdata": {
+      "post": {
+        "summary": "Get dashboard overview data",
+        "tags": [
+          "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "company_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "company_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company/save": {
+      "post": {
+        "summary": "Create or update organization",
+        "tags": [
+          "Company"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "company_name": "My Org",
+                "industry": "Tech"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company/getdata": {
+      "post": {
+        "summary": "Get company data",
+        "tags": [
+          "Company"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "company_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "company_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/join-company": {
+      "post": {
+        "summary": "Join an existing company",
+        "tags": [
+          "Company"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "company_unique_code": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "company_unique_code": "ORG-XXXX"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apiKeyToken/save": {
+      "post": {
+        "summary": "Generate API key",
+        "tags": [
+          "ApiKey"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "api_key_name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "api_key_name": "Production Key"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apiKeyToken/getData": {
+      "post": {
+        "summary": "Get API keys list",
+        "tags": [
+          "ApiKey"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/save": {
+      "post": {
+        "summary": "Create invite link",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "email": "invitee@example.com",
+                "role_id": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/validate": {
+      "post": {
+        "summary": "Validate invite token",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "token": "invite_token"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/copy-invite-link": {
+      "post": {
+        "summary": "Copy invite link",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/resend-invite": {
+      "post": {
+        "summary": "Resend invite email",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/cancel-invite": {
+      "post": {
+        "summary": "Cancel pending invite",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/invite/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete invite",
+        "tags": [
+          "Invite"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company-member-roles/updateDeleteFlagData": {
+      "post": {
+        "summary": "Remove member from company",
+        "tags": [
+          "CompanyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company-member-roles/approve": {
+      "post": {
+        "summary": "Approve member join request",
+        "tags": [
+          "CompanyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "member_id": 1,
+                "company_id": 1,
+                "admin_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company-member-roles/reject": {
+      "post": {
+        "summary": "Reject member join request",
+        "tags": [
+          "CompanyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "member_id": 1,
+                "company_id": 1,
+                "admin_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/access-management/getData": {
+      "post": {
+        "summary": "Get access management data",
+        "tags": [
+          "CompanyMembers"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usage/getdata": {
+      "post": {
+        "summary": "Get usage data (paginated)",
+        "tags": [
+          "Usage"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usage/getdatabyid": {
+      "post": {
+        "summary": "Get usage detail by model",
+        "tags": [
+          "Usage"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timezone/getall": {
+      "get": {
+        "summary": "Get all timezones",
+        "tags": [
+          "Usage"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/cloud-provider/getdata": {
+      "post": {
+        "summary": "Get cloud providers",
+        "tags": [
+          "Cloud"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-provider/getall": {
+      "get": {
+        "summary": "Get all cloud providers (dropdown)",
+        "tags": [
+          "Cloud"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/cloud-region/getdata": {
+      "post": {
+        "summary": "Get cloud regions",
+        "tags": [
+          "Cloud"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "c_provider_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "c_provider_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-secret/getdata": {
+      "post": {
+        "summary": "Get secrets for cloud provider",
+        "tags": [
+          "Cloud"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "c_provider_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-secrets/getdata": {
+      "post": {
+        "summary": "Get CloudSecrets list (paginated)",
+        "tags": [
+          "CloudSecrets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-secrets/getdatabyid": {
+      "post": {
+        "summary": "Get CloudSecrets by ID",
+        "tags": [
+          "CloudSecrets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-secrets/save": {
+      "post": {
+        "summary": "Create or update CloudSecrets",
+        "tags": [
+          "CloudSecrets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "AWS Key",
+                "c_provider_id": 1,
+                "cloud_service_id": 1,
+                "secrets": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-secrets/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete CloudSecrets",
+        "tags": [
+          "CloudSecrets"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-account/getdata": {
+      "post": {
+        "summary": "Get CloudAccount list (paginated)",
+        "tags": [
+          "CloudAccount"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-account/getdatabyid": {
+      "post": {
+        "summary": "Get CloudAccount by ID",
+        "tags": [
+          "CloudAccount"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-account/save": {
+      "post": {
+        "summary": "Create or update CloudAccount",
+        "tags": [
+          "CloudAccount"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Production AWS",
+                "c_provider_id": 1,
+                "region_id": 1,
+                "cloud_secret_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cloud-account/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete CloudAccount",
+        "tags": [
+          "CloudAccount"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosted-zone/getdata": {
+      "post": {
+        "summary": "Get HostedZone list (paginated)",
+        "tags": [
+          "HostedZone"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosted-zone/getdatabyid": {
+      "post": {
+        "summary": "Get HostedZone by ID",
+        "tags": [
+          "HostedZone"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosted-zone/save": {
+      "post": {
+        "summary": "Create or update HostedZone",
+        "tags": [
+          "HostedZone"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "example.com",
+                "c_provider_id": 1,
+                "region_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hosted-zone/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete HostedZone",
+        "tags": [
+          "HostedZone"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketplace-filter/getdata": {
+      "post": {
+        "summary": "Get marketplace filter options",
+        "tags": [
+          "Marketplace"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/models/getdata": {
+      "post": {
+        "summary": "Get models list",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models/getdatabyid": {
+      "post": {
+        "summary": "Get model by ID",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-category/getdata": {
+      "post": {
+        "summary": "Get model categories",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/model-task/getdata": {
+      "post": {
+        "summary": "Get model tasks",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "model_category_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "model_category_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-class/getall": {
+      "get": {
+        "summary": "Get all model classes",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/hardware-master/getdata": {
+      "post": {
+        "summary": "Get hardware master list",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/embedding-model/getdata": {
+      "post": {
+        "summary": "Get embedding models",
+        "tags": [
+          "Models"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/cms-docs/getdatabyid": {
+      "post": {
+        "summary": "Get CMS doc by ID",
+        "tags": [
+          "CmsDocs"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/playground/getdata": {
+      "post": {
+        "summary": "Get playground models/config",
+        "tags": [
+          "Playground"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/inference": {
+      "post": {
+        "summary": "Run model inference",
+        "tags": [
+          "Playground"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "model_id": 1,
+                "messages": [
+                  {
+                    "role": "user",
+                    "content": "Hello"
+                  }
+                ],
+                "temperature": 0.7
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model/my-model/getdata": {
+      "post": {
+        "summary": "Get my models list",
+        "tags": [
+          "MyModel"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model/my-model/getdatabyid": {
+      "post": {
+        "summary": "Get my model by ID",
+        "tags": [
+          "MyModel"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model/my-model/save": {
+      "post": {
+        "summary": "Create/update my model",
+        "tags": [
+          "MyModel"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Custom Model",
+                "model_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-training-listing/getdata": {
+      "post": {
+        "summary": "Get training jobs list",
+        "tags": [
+          "Training"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-training/getdata": {
+      "post": {
+        "summary": "Get trainings",
+        "tags": [
+          "Training"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-training/getdatabyid": {
+      "post": {
+        "summary": "Get training by ID",
+        "tags": [
+          "Training"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/model-training/save": {
+      "post": {
+        "summary": "Create training job",
+        "tags": [
+          "Training"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "model_id": 1,
+                "dataset_id": 1,
+                "training_type": "fine-tune"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/getdata": {
+      "post": {
+        "summary": "Get Dataset list (paginated)",
+        "tags": [
+          "Dataset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/getdatabyid": {
+      "post": {
+        "summary": "Get Dataset by ID",
+        "tags": [
+          "Dataset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/save": {
+      "post": {
+        "summary": "Create or update Dataset",
+        "tags": [
+          "Dataset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "My Dataset",
+                "type": "file",
+                "data_format": "jsonl"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete Dataset",
+        "tags": [
+          "Dataset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dataset/restore": {
+      "post": {
+        "summary": "Restore deleted dataset",
+        "tags": [
+          "Dataset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployment/getdata": {
+      "post": {
+        "summary": "Get deployments list",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployment/getdatabyid": {
+      "post": {
+        "summary": "Get deployment by ID",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployment/save": {
+      "post": {
+        "summary": "Create deployment",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "model_id": 1,
+                "cluster_id": 1,
+                "hardware_specs_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployment/update-deployment-status": {
+      "post": {
+        "summary": "Update deployment status (pause/resume/delete)",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "id": 1,
+                "status": "paused"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/deployment-model/getData": {
+      "post": {
+        "summary": "Get deployment-ready models",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/get-clusters/getdata": {
+      "post": {
+        "summary": "Get clusters list",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-clusters/getdatabyid": {
+      "post": {
+        "summary": "Get cluster by ID",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-scaling-metrics/getdatabyid": {
+      "post": {
+        "summary": "Get scaling metrics for deployment",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/gpu-cost/get-cost": {
+      "post": {
+        "summary": "Get GPU cost estimate",
+        "tags": [
+          "Deployment"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "hardware_specs_id": 1,
+                "hours": 24
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/getData": {
+      "post": {
+        "summary": "Get batch inference jobs",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/getdatabyid": {
+      "post": {
+        "summary": "Get batch inference by ID",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/save": {
+      "post": {
+        "summary": "Create/update batch inference",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Batch Job 1",
+                "model_id": 1,
+                "input_file_path": "s3://..."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete batch inference",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/run": {
+      "post": {
+        "summary": "Sync/run batch inference now",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/jobs": {
+      "post": {
+        "summary": "Get batch inference job history",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "batch_inference_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "batch_inference_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference/download-sample-dataset": {
+      "post": {
+        "summary": "Download sample dataset template",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference-job/getdata": {
+      "post": {
+        "summary": "Get batch inference job list",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/batch-inference-job/getdatabyid": {
+      "post": {
+        "summary": "Get batch inference job by ID",
+        "tags": [
+          "BatchInference"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking/getdata": {
+      "post": {
+        "summary": "Get benchmarking list",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking/getdatabyid": {
+      "post": {
+        "summary": "Get benchmarking by ID",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking/save": {
+      "post": {
+        "summary": "Create benchmarking job",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Benchmark 1",
+                "model_id": 1,
+                "dataset_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete benchmarking",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking-dataset/getdata": {
+      "post": {
+        "summary": "Get benchmarking datasets",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/benchmarking-dataset/download-sample-dataset": {
+      "post": {
+        "summary": "Download benchmarking sample dataset",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/evaluation-tasks/getdata": {
+      "post": {
+        "summary": "Get evaluation task types",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base/getdata": {
+      "post": {
+        "summary": "Get KnowledgeBase list (paginated)",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base/getdatabyid": {
+      "post": {
+        "summary": "Get KnowledgeBase by ID",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base/save": {
+      "post": {
+        "summary": "Create or update KnowledgeBase",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "My KB",
+                "vector_store_id": 1,
+                "embedding_model_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete KnowledgeBase",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base-source/getall": {
+      "get": {
+        "summary": "Get all KB source types",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/database-type/getall": {
+      "get": {
+        "summary": "Get all database types",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/knowledge-base-vector-store/getall": {
+      "get": {
+        "summary": "Get all vector stores",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        }
+      }
+    },
+    "/knowledge-base-source-mapping/getdata": {
+      "post": {
+        "summary": "Get KB source mappings",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "knowledge_base_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "knowledge_base_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/knowledge-base-source-mapping/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete KB source mapping",
+        "tags": [
+          "KnowledgeBase"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/getdata": {
+      "post": {
+        "summary": "Get wallet balance",
+        "tags": [
+          "Billing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "company_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "company_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/getdatabyid": {
+      "post": {
+        "summary": "Get transaction history",
+        "tags": [
+          "Billing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "wallet_id": {
+                    "type": "integer"
+                  },
+                  "start_date": {
+                    "type": "string"
+                  },
+                  "end_date": {
+                    "type": "string"
+                  },
+                  "reference_type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "wallet_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/wallet/cost-forecast": {
+      "post": {
+        "summary": "Get organization wallet cost forecast",
+        "description": "Returns combined trend-regression and usage-simulation forecasts. The authenticated member must have active access to the requested organization. The service resolves the organization's wallet internally; wallet_id and base_spend cannot be supplied by the caller.",
+        "tags": [
+          "Billing"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CostForecastRequest"
+              },
+              "example": {
+                "company_id": 1,
+                "months": 3
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cost forecast fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CostForecastResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid company_id or months"
+          },
+          "401": {
+            "description": "Missing or invalid bearer token"
+          },
+          "403": {
+            "description": "The authenticated member does not have active access to the organization"
+          },
+          "404": {
+            "description": "Organization wallet or forecast data not found"
+          },
+          "503": {
+            "description": "Cost forecast service unavailable"
+          }
+        }
+      }
+    },
+    "/budget-control/getdata": {
+      "post": {
+        "summary": "Get budget controls",
+        "tags": [
+          "BudgetControl"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget-control/save": {
+      "post": {
+        "summary": "Create/update budget alert",
+        "tags": [
+          "BudgetControl"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "alert_name": "Monthly Alert",
+                "threshold_amount": 500,
+                "company_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget-control/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete budget control",
+        "tags": [
+          "BudgetControl"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget-control/seen-alert": {
+      "post": {
+        "summary": "Mark budget alert as seen",
+        "tags": [
+          "BudgetControl"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "budget_alert_id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "budget_alert_id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservation/save": {
+      "post": {
+        "summary": "Create GPU reservation request",
+        "tags": [
+          "Reservation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "model_id": 1,
+                "gpu_count": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/getdata": {
+      "post": {
+        "summary": "Get notifications list",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/mark-as-read": {
+      "post": {
+        "summary": "Mark notifications as read",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "ids": [
+                  1,
+                  2,
+                  3
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-platforms/getdata": {
+      "post": {
+        "summary": "Get available webhook platforms",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/getdata": {
+      "post": {
+        "summary": "Get webhook configurations",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/save": {
+      "post": {
+        "summary": "Create/update webhook config",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "platform_id": 1,
+                "webhook_url": "https://hooks.slack.com/...",
+                "events": [
+                  "deployment.failed"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/verify": {
+      "post": {
+        "summary": "Verify webhook URL",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/updateDeleteFlagData": {
+      "post": {
+        "summary": "Delete webhook config",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/active": {
+      "post": {
+        "summary": "Toggle webhook active status",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "id": 1,
+                "is_active": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/webhook-config/get-users": {
+      "post": {
+        "summary": "Get users for webhook notifications",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {}
+            }
+          }
+        }
+      }
+    },
+    "/integrations/getdata": {
+      "post": {
+        "summary": "Get integrations list",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrations/save": {
+      "post": {
+        "summary": "Save integration config",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "platform_id": 1,
+                "config": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/integrations/toggle-active": {
+      "post": {
+        "summary": "Toggle integration active",
+        "tags": [
+          "Webhooks"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "is_active": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "example": {
+                "id": 1,
+                "is_active": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "/audit-log/getdata": {
+      "post": {
+        "summary": "Get audit log entries",
+        "tags": [
+          "AuditLog"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "page_number": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "page_size": {
+                    "type": "integer",
+                    "example": 10
+                  },
+                  "filterOptions": {
+                    "type": "object",
+                    "properties": {
+                      "company_id": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "module": {
+                        "oneOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        ]
+                      },
+                      "action": {
+                        "type": "string"
+                      },
+                      "member_id": {
+                        "type": "integer"
+                      },
+                      "search": {
+                        "type": "string"
+                      },
+                      "date_range": {
+                        "type": "string",
+                        "enum": [
+                          "Last 12 hours",
+                          "Last 24 hours",
+                          "Last 1 week",
+                          "Last 1 Month",
+                          "Custom"
+                        ],
+                        "description": "Preset date range. Last 1 Month is the previous 30 days."
+                      },
+                      "start_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Required when date_range is Custom."
+                      },
+                      "end_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Required when date_range is Custom."
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "page_number": 1,
+                "page_size": 10,
+                "filterOptions": {
+                  "company_id": 1,
+                  "date_range": "Last 24 hours"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guardrails/getdata": {
+      "post": {
+        "summary": "Get Guardrails list (paginated)",
+        "tags": [
+          "Guardrails"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pageNumber": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "pageSize": {
+                    "type": "integer",
+                    "example": 25
+                  },
+                  "search": {
+                    "type": "string",
+                    "example": ""
+                  }
+                }
+              },
+              "example": {
+                "pageNumber": 1,
+                "pageSize": 25,
+                "search": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guardrails/getdatabyid": {
+      "post": {
+        "summary": "Get Guardrails by ID",
+        "tags": [
+          "Guardrails"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": 1
+                }
+              },
+              "example": {
+                "id": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guardrails/save": {
+      "post": {
+        "summary": "Create or update Guardrails",
+        "tags": [
+          "Guardrails"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Content Filter",
+                "type": "input",
+                "rules": []
+              }
+            }
+          }
+        }
+      }
+    },
+    "/guardrails/updateDeleteFlagData": {
+      "post": {
+        "summary": "Soft-delete Guardrails",
+        "tags": [
+          "Guardrails"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "is_delete": {
+                    "type": "integer"
+                  }
+                },
+                "example": {
+                  "id": [
+                    1
+                  ],
+                  "is_delete": 1
+                }
+              },
+              "example": {
+                "id": [
+                  1
+                ],
+                "is_delete": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "/apiHealthCheck/apihealth": {
+      "get": {
+        "summary": "API Health Check",
+        "tags": [
+          "HealthCheck"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "security": []
+      }
+    },
+    "/security/encryption": {
+      "post": {
+        "summary": "Encrypt raw payload (dev)",
+        "tags": [
+          "Security"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "name": "Sample String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/security/decryption": {
+      "post": {
+        "summary": "Decrypt encrypted payload (dev)",
+        "tags": [
+          "Security"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "details": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "details": "U2FsdGVkX1..."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hugging-face-repo-verification": {
+      "post": {
+        "summary": "Verify HuggingFace model repository",
+        "tags": [
+          "Benchmarking"
+        ],
+        "responses": {
+          "200": {
+            "description": "Repo verification result"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "repository_url": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "repository_url": "meta-llama/Llama-2-7b"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "PaginatedRequest": {
+        "type": "object",
+        "properties": {
+          "pageNumber": {
+            "type": "integer",
+            "example": 1
+          },
+          "pageSize": {
+            "type": "integer",
+            "example": 25
+          },
+          "search": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      },
+      "SoftDeletePayload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "is_delete": {
+            "type": "integer"
+          }
+        },
+        "example": {
+          "id": [
+            1
+          ],
+          "is_delete": 1
+        }
+      },
+      "IdPayload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        },
+        "example": {
+          "id": 1
+        }
+      },
+      "CostForecastRequest": {
+        "type": "object",
+        "required": [
+          "company_id"
+        ],
+        "properties": {
+          "company_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Organization whose wallet will be used for forecasting"
+          },
+          "months": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12,
+            "default": 3,
+            "description": "Number of future months to forecast"
+          }
+        }
+      },
+      "CostForecastPoint": {
+        "type": "object",
+        "required": [
+          "month",
+          "predicted",
+          "lower_bound",
+          "upper_bound"
+        ],
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$",
+            "example": "2026-08"
+          },
+          "predicted": {
+            "type": "number",
+            "format": "double",
+            "description": "Forecasted cost in INR"
+          },
+          "lower_bound": {
+            "type": "number",
+            "format": "double",
+            "description": "Lower estimate in INR"
+          },
+          "upper_bound": {
+            "type": "number",
+            "format": "double",
+            "description": "Upper estimate in INR"
+          }
+        }
+      },
+      "TrendCostForecast": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "trend_regression"
+            ]
+          },
+          "data_source": {
+            "type": "string",
+            "enum": [
+              "user_history",
+              "synthetic_fallback"
+            ]
+          },
+          "months_used": {
+            "type": "integer"
+          },
+          "model_r2": {
+            "type": "number",
+            "format": "double"
+          },
+          "model_mae": {
+            "type": "number",
+            "format": "double",
+            "description": "Mean absolute error in INR"
+          },
+          "forecasts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostForecastPoint"
+            }
+          }
+        }
+      },
+      "SimulationCostForecast": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string",
+            "enum": [
+              "usage_simulation"
+            ]
+          },
+          "data_source": {
+            "type": "string",
+            "enum": [
+              "user_history",
+              "synthetic_fallback"
+            ]
+          },
+          "base_spend": {
+            "type": "number",
+            "format": "double",
+            "description": "Starting spend selected by the upstream service, in INR"
+          },
+          "growth_factor": {
+            "type": "number",
+            "format": "double"
+          },
+          "forecasts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostForecastPoint"
+            }
+          }
+        }
+      },
+      "CostForecastResult": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "integer",
+            "nullable": true
+          },
+          "trend": {
+            "$ref": "#/components/schemas/TrendCostForecast"
+          },
+          "simulation": {
+            "$ref": "#/components/schemas/SimulationCostForecast"
+          }
+        }
+      },
+      "CostForecastResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "10000"
+          },
+          "msg": {
+            "type": "string",
+            "example": "Cost forecast fetched successfully."
+          },
+          "error": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
+          "details": {
+            "$ref": "#/components/schemas/CostForecastResult"
+          }
+        }
+      }
+    }
+  }
+}

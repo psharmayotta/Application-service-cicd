@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Verify your Email ID</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6fb;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #efe7ff, #f7f3ff);
+            text-align: center;
+            padding: 28px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #6c3cff;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 30px 35px;
+            color: #333333;
+        }
+
+        .content h2 {
+            margin-top: 0;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .content p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #555555;
+        }
+
+        .button-wrapper {
+            margin: 22px 0 28px 0;
+            text-align: left;
+            /* 👈 LEFT aligned */
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 24px;
+            background-color: #6c3cff;
+            color: #ffffff !important;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background-color: #5a2ee0;
+        }
+
+        .link {
+            word-break: break-all;
+            color: #6c3cff;
+            font-size: 14px;
+        }
+
+        .footer {
+            border-top: 1px solid #eeeeee;
+            padding: 18px 35px;
+            font-size: 13px;
+            color: #888888;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Qzero</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2>Verify your Email ID</h2>
+
+            <p>
+                Please confirm your email address to complete your account setup.
+                Click the button below to verify your email ID and get started.
+            </p>
+
+            <div class="button-wrapper">
+                <a href="{{VERIFY_EMAIL_URL}}" class="button">
+                    Verify Email ID
+                </a>
+            </div>
+
+            <p>
+                If the above button doesn't work, you can click on the following URL
+            </p>
+
+            <p class="link">
+                {{VERIFY_EMAIL_URL}}
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            If you didn’t create this account, you can safely ignore this email.
+        </div>
+
+    </div>
+
+</body>
+
+</html>

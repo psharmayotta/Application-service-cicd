@@ -1,0 +1,41 @@
+import { IsString, IsOptional, MaxLength } from "class-validator";
+import { InferModel } from "../InferModel/InferModel.model";
+import { MyModelStatus } from "../../../config";
+
+export class MyModelModel extends InferModel {
+    name: string = null;
+    model_unique_key: string = null;
+    model_source_id: number = null;
+    description: string = null;
+    model_source_repo: string = null;
+    cloud_provider_id: number = null;
+    cloud_secret_id: number = null;
+    model_class_id: number = null;
+    cloud_account_id: number = null;
+    region_id: number = null;
+    accelerator_count: number = null;
+    accelerator_id: number = null;
+    machine_type_id: number = null;
+    quantization_id: number = null;
+    model_configuration: any = null;
+    optimization_configuration: any = null;
+    pipeline_configuration: any = null;
+    member_id: number = null;
+    company_id: number = null;
+    decryptToken: any = null;
+    status: MyModelStatus = MyModelStatus.JOB_RECEIVED;
+    quantization_endpoint: string = '';
+    training_id: number = null;
+    is_compiled: boolean = false;
+    is_docker: boolean = false;
+    latest_kafka_message: any = null;
+    status_log: any[] = [];
+    registry: string = null;
+    docker_image_url: string = null;
+    host_provider: number = null;
+    cpu_request: number = null;
+    cpu_limit: number = null;
+    memory_request: number = null;
+    memory_limit: number = null;
+    overall_configuration: any = null;
+}

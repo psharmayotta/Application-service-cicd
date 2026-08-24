@@ -1,0 +1,73 @@
+replicaCount: 1
+
+image:
+  repository: 534774607607.dkr.ecr.ap-south-1.amazonaws.com/q0-dev-frontend-service
+  tag: "App_svc_Stage_1"
+  pullPolicy: IfNotPresent
+
+container:
+  name: q0-uiapi
+  ports:
+    - name: http
+      containerPort: 3210
+    - name: secondary
+      containerPort: 3220
+
+service:
+  name: q0-uiapi-service
+  type: NodePort
+  ports:
+    - name: http
+      port: 3210
+      targetPort: 3210
+    - name: secondary
+      port: 3220
+      targetPort: 3220
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: /Infer/api/apiHealthCheck/apihealth
+
+labels:
+  app: q0-uiapi
+
+resources:
+  requests:
+    cpu: "300m"
+    memory: "0.25Gi"
+  limits:
+    cpu: "500m"
+    memory: "0.5Gi"
+
+probes:
+  startup:
+    httpGet:
+      path: /Infer/api/apiHealthCheck/apihealth
+      port: http
+    failureThreshold: 5
+    initialDelaySeconds: 20
+    timeoutSeconds: 10
+    periodSeconds: 10
+  liveness:
+    httpGet:
+      path: /Infer/api/apiHealthCheck/apihealth
+      port: http
+    failureThreshold: 5
+    initialDelaySeconds: 30
+    timeoutSeconds: 10
+    periodSeconds: 30
+  readiness:
+    httpGet:
+      path: /Infer/api/apiHealthCheck/apihealth
+      port: http
+    failureThreshold: 5
+    initialDelaySeconds: 20
+    timeoutSeconds: 10
+    periodSeconds: 10
+
+progressDeadlineSeconds: 180
+
+podAnnotations: {}
+podLabels: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
