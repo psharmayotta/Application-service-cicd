@@ -1,4 +1,4 @@
-FROM node:22.18.0-alpine AS builder
+FROM node:22.18.0 AS builder
 
 WORKDIR /app
 
@@ -11,9 +11,13 @@ COPY src/ ./src/
 RUN npm run build
 
 # --- Production stage ---
-FROM node:22.18.0-alpine
+FROM node:22.18.0-slim
 
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ librdkafka-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY package*.json ./
 RUN npm install --legacy-peer-deps --omit=dev
